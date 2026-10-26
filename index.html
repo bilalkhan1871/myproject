@@ -6,16 +6,16 @@
 <meta name="theme-color" content="#171717">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="My Products">
+<meta name="apple-mobile-web-app-title" content="Trendy Gadgets">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.svg">
-<title>My Products</title>
+<title>Trendy Gadgets</title>
 <style>
 :root{color-scheme:light;--ink:#171717;--muted:#737373;--line:#e5e5e5;--bg:#f6f6f6;--card:#fff;--accent:#171717;--soft:#efefef;--danger:#b42318}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 button,input,textarea{font:inherit}button{cursor:pointer}
 header{padding:calc(18px + env(safe-area-inset-top)) 18px 18px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:3}
-.headrow{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-size:25px;font-weight:800;letter-spacing:-.8px}.sub{font-size:13px;color:var(--muted);margin-top:4px}
+.headrow{display:flex;align-items:center;justify-content:center;gap:12px;position:relative;min-height:34px}.brand{font-size:25px;font-weight:800;letter-spacing:-.8px;text-align:center}.sub{display:none}#addTop{position:absolute;right:0;top:50%;transform:translateY(-50%)}
 main{max-width:760px;margin:0 auto;padding:16px 14px calc(40px + env(safe-area-inset-bottom))}
 .search{width:100%;padding:14px 15px;border:1px solid var(--line);border-radius:14px;background:white;outline:none;margin:2px 0 14px}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}
@@ -26,7 +26,7 @@ main{max-width:760px;margin:0 auto;padding:16px 14px calc(40px + env(safe-area-i
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0}
 .photo{width:100%;aspect-ratio:1.15;object-fit:cover;background:#eee;display:block}
 .placeholder{aspect-ratio:1.15;display:flex;align-items:center;justify-content:center;background:#eee;color:#888}
-.info{padding:12px}.name{font-weight:750;overflow-wrap:anywhere}.order{font-size:12px;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.price{font-size:18px;font-weight:800;margin-top:9px}
+.info{padding:12px}.name{font-weight:750;overflow-wrap:anywhere}.model{font-size:12px;color:var(--muted);margin-top:5px;overflow-wrap:anywhere}.price{font-size:18px;font-weight:800;margin-top:9px}
 .cardbuttons{display:flex;gap:8px;margin-top:12px}.smallbtn{flex:1;border:0;background:var(--soft);border-radius:9px;padding:9px 4px;font-size:13px;font-weight:650}
 .empty{text-align:center;padding:42px 18px;color:var(--muted);background:white;border:1px dashed #d4d4d4;border-radius:16px}.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:8px}
 dialog{width:min(540px,calc(100% - 24px));border:0;border-radius:20px;padding:0;box-shadow:0 18px 70px #0003;max-height:90vh;overflow:auto}
@@ -40,12 +40,12 @@ dialog::backdrop{background:#0007}.modalhead{padding:18px 18px 12px;display:flex
 <body>
 <header>
  <div class="headrow">
-  <div><div class="brand">My Products</div><div class="sub">Your private product inventory</div></div>
+  <div><div class="brand">Trendy Gadgets</div></div>
   <button class="topbtn" id="addTop">＋ Add</button>
  </div>
 </header>
 <main>
- <input class="search" id="search" type="search" placeholder="Search product name or order number…" autocomplete="off">
+ <input class="search" id="search" type="search" placeholder="Search by model number or product name…" autocomplete="off">
  <div class="actions">
   <button class="btn" id="addBtn">＋ Add product</button>
   <button class="btn secondary" id="exportBtn">Export backup</button>
@@ -54,7 +54,7 @@ dialog::backdrop{background:#0007}.modalhead{padding:18px 18px 12px;display:flex
  </div>
  <div class="count" id="count">Loading products…</div>
  <section class="grid" id="grid"></section>
- <div class="empty" id="empty" hidden><strong>No products found</strong>Add a product photo, order number and price. Your saved products will appear here.</div>
+ <div class="empty" id="empty" hidden><strong>No products found</strong>Add a product photo, model number and price. Your saved products will appear here.</div>
  <p class="note">Your product details are saved in this browser on this device. Export a backup occasionally. Avoid clearing Safari website data unless you have a backup.</p>
 </main>
 <dialog id="editor">
@@ -63,8 +63,8 @@ dialog::backdrop{background:#0007}.modalhead{padding:18px 18px 12px;display:flex
   <input id="productId" type="hidden">
   <div class="field"><label for="photo">Product photo</label><input id="photo" type="file" accept="image/*" capture="environment"><img id="preview" class="preview" alt="Selected product preview"><div class="note">Choose a photo from Photos or take a picture. Images are stored on this device.</div></div>
   <div class="field"><label for="name">Product name (optional)</label><input id="name" maxlength="100" placeholder="e.g. Black T-shirt"></div>
-  <div class="field"><label for="order">Order number *</label><input id="order" required maxlength="100" placeholder="e.g. 1025"></div>
-  <div class="field"><label for="price">Price (PKR) *</label><input id="price" required type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 1200"></div>
+  <div class="field"><label for="modelNumber">Model number *</label><input id="modelNumber" required maxlength="100" placeholder="e.g. SKU-00192"></div>
+  <div class="field"><label for="price">Price (K) *</label><input id="price" required type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 1200"></div>
   <div class="field"><label for="notes">Notes (optional)</label><textarea id="notes" maxlength="1000" placeholder="Shelf, box, colour, size, or other details"></textarea></div>
   <div class="formactions"><button class="btn secondary" id="cancelBtn" type="button">Cancel</button><button class="btn" type="submit">Save product</button></div>
  </form>
@@ -87,16 +87,16 @@ function allProducts(){return new Promise((resolve,reject)=>{const r=db.transact
 function saveProduct(item){return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");const s=tx.objectStore(STORE);if(item.id)s.put(item);else s.add(item);tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}
 function deleteProduct(id){return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,"readwrite");tx.objectStore(STORE).delete(Number(id));tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});}
 const $=id=>document.getElementById(id);
-const money=n=>new Intl.NumberFormat("en-PK",{style:"currency",currency:"PKR",maximumFractionDigits:2}).format(Number(n)||0);
+const money=n=>`K ${new Intl.NumberFormat("en-US",{maximumFractionDigits:2}).format(Number(n)||0)}`;
 function escapeHTML(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 async function render(){
  const q=$("search").value.trim().toLowerCase();
  const products=await allProducts();
- const filtered=products.filter(p=>[p.name,p.order,p.notes].some(v=>String(v||"").toLowerCase().includes(q)));
+ const filtered=products.filter(p=>[p.name,p.modelNumber,p.order,p.notes].some(v=>String(v||"").toLowerCase().includes(q)));
  $("count").textContent=`${filtered.length} product${filtered.length===1?"":"s"}${q?" found":""}`;
  $("grid").innerHTML=filtered.map(p=>`<article class="card">
- ${p.photo?`<img class="photo" src="${URL.createObjectURL(p.photo)}" alt="${escapeHTML(p.name||p.order)}">`:`<div class="placeholder">No photo</div>`}
- <div class="info"><div class="name">${escapeHTML(p.name||"Unnamed product")}</div><div class="order">Order #${escapeHTML(p.order)}</div><div class="price">${money(p.price)}</div>
+ ${p.photo?`<img class="photo" src="${URL.createObjectURL(p.photo)}" alt="${escapeHTML(p.name||p.modelNumber||p.order)}">`:`<div class="placeholder">No photo</div>`}
+ <div class="info"><div class="name">${escapeHTML(p.name||"Unnamed product")}</div><div class="model">Model: ${escapeHTML(p.modelNumber||p.order||"Not set")}</div><div class="price">${money(p.price)}</div>
  <div class="cardbuttons"><button class="smallbtn" data-edit="${p.id}">Edit</button><button class="smallbtn" data-delete="${p.id}">Delete</button></div></div></article>`).join("");
  $("empty").hidden=filtered.length>0;
 }
@@ -106,7 +106,7 @@ function resetForm(){
 }
 function openEditor(p){
  resetForm();
- if(p){$("formTitle").textContent="Edit product";$("productId").value=p.id;$("name").value=p.name||"";$("order").value=p.order;$("price").value=p.price;$("notes").value=p.notes||"";currentPhoto=p.photo||null;if(currentPhoto){$("preview").src=URL.createObjectURL(currentPhoto);$("preview").style.display="block";}}
+ if(p){$("formTitle").textContent="Edit product";$("productId").value=p.id;$("name").value=p.name||"";$("modelNumber").value=p.modelNumber||p.order||"";$("price").value=p.price;$("notes").value=p.notes||"";currentPhoto=p.photo||null;if(currentPhoto){$("preview").src=URL.createObjectURL(currentPhoto);$("preview").style.display="block";}}
  $("editor").showModal();
 }
 $("photo").addEventListener("change",async e=>{
@@ -122,10 +122,10 @@ $("photo").addEventListener("change",async e=>{
 });
 $("productForm").addEventListener("submit",async e=>{
  e.preventDefault();
- const order=$("order").value.trim(), price=$("price").value;
- if(!order||price===""||Number(price)<0){alert("Enter an order number and a valid price.");return;}
+ const modelNumber=$("modelNumber").value.trim(), price=$("price").value;
+ if(!modelNumber||price===""||Number(price)<0){alert("Enter a model number and a valid price.");return;}
  const id=$("productId").value;
- const item={order,price:Number(price),name:$("name").value.trim(),notes:$("notes").value.trim(),photo:selectedPhoto||currentPhoto||null,updated:Date.now()};
+ const item={modelNumber,price:Number(price),name:$("name").value.trim(),notes:$("notes").value.trim(),photo:selectedPhoto||currentPhoto||null,updated:Date.now()};
  if(id)item.id=Number(id);
  try{await saveProduct(item);$("editor").close();resetForm();await render();}
  catch(err){alert("Could not save this product. Your device may be low on storage. Try a smaller photo.");}
