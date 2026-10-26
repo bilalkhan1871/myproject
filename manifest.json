@@ -1,0 +1,9 @@
+{
+  "name": "My Products",
+  "short_name": "My Products",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f6f6",
+  "theme_color": "#171717",
+  "description": "Private, offline personal product inventory"
+}
